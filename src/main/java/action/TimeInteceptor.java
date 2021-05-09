@@ -21,7 +21,7 @@ public class TimeInteceptor implements Interceptor {
     public String intercept(ActionInvocation actionInvocation) throws Exception {
         ActionContext actionContext = ActionContext.getContext();
         Map<String, Object> session = actionContext.getSession();
-        if(session.get("user") == null) {
+        if(session.get("user111") == null) {
             return "login";
         }
         return actionInvocation.invoke();
