@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+    <!--设置请求后缀-->
+    <constant name="struts.action.extension" value="do,html"></constant>
+    <!--设置编码，解决中文乱码-->
+    <constant name="struts.i18n.encoding" value="utf-8"></constant>
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="true"></constant>
+    <!--namespace默认根路径，-->
+    <constant name="struts.i18n.encoding" value="UTF-8"></constant>
+    <package name="default" namespace="/user" extends="struts-default">
+        
+        <default-action-ref name="default"></default-action-ref>
+        <global-allowed-methods>login,regist</global-allowed-methods>
+        <!--name属性代表请求路径 class属性代表请求的那个类-->
+        <action name="hello" class="action.HelloAction">
+            <!--响应结果和页面进行映射，找的时候按照namspace找所以/user下找不到，要回根路径找-->
+            <result name="success">/struts.jsp</result>
+            <result name="error">/error.jsp</result>
+        </action>
+        
+        <action name="login" class="action.UserAction" method="login">
+            <result name="success">/login.jsp</result>
+        </action>
+        <action name="regist" class="action.UserAction" method="regist">
+            <result name="success" type="redirectAction">login.do</result>
+        </action>
+
+        <action name="*User" class="action.UserAction" method="{1}">
+            <result name="success">/{1}.jsp</result>
+        </action>
+
+
+        <!--仅对当前package有效-->
+        <action name="default">
+            <result>/index.jsp</result>
+        </action>
+    </package>
+
+    <package name="test" namespace="/" extends="struts-default,json-default">
+        <interceptors>
+            <interceptor name="login" class="action.TimeInteceptor"/>
+            <interceptor-stack name="login-stack">
+                <interceptor-ref name="login"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <global-results>
+            <result name="login">/login.jsp</result>
+        </global-results>
+
+        <action name="test" class="action.UserAction" method="login">
+            <result type="redirectAction">
+                <param name="namespace">/user</param>
+                <param name="actionName">login.do</param>
+            </result>
+        </action>
+
+        <action name="page" class="action.UserAction" method="toPage">
+            <result name="success">/${page}.jsp</result>
+        </action>
+
+        <action name="tag" class="action.TagAction">
+            <result name="success">/tag.jsp</result>
+        </action>
+        <action name="valLogin" class="action.Val" method="login">
+            <result name="success">/val.jsp</result>
+            <result name="input">/val.jsp</result>
+        </action>
+        <action name="valRegist" class="action.Val" method="regist">
+            <interceptor-ref name="login-stack"/>
+            <result name="success">/val.jsp</result>
+            <result name="input">/val.jsp</result>
+        </action>
+
+        <action name="fileUp" class="action.FileAction" method="fileUpLoad">
+            <result name="success">/file_up.jsp</result>
+        </action>
+
+        <action name="download" class="action.FileAction" method="FileDown">
+            <result name="success" type="stream">
+               <!-- <param name="conetnType">image/gif</param>-->
+                <param name="inputName">inputStream</param><!--action中的流名称通过get方法-->
+                <param name="contentDisposition">
+                    attachment;filename="${fileUpLoadFileName}"<!--action中的属性名-->
+                </param>
+                <param name="bufferSize">4096</param>
+            </result>
+        </action>
+
+        <action name="ajaxAction" class="action.AjaxAction" method="returnJson">
+            <result type="json">
+                <param name="root">map</param>
+            </result>
+        </action>
+        <action name="ajaxUser" class="action.AjaxAction" method="returnUserJson">
+            <result type="json">
+                <param name="root">user</param>
+            </result>
+        </action>
+    </package>
+
+</struts>

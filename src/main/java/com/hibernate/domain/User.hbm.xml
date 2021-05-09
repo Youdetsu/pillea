@@ -1,0 +1,16 @@
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <!--name是模型的全类名-->
+    <class name="com.hibernate.domain.User" table="t_user">
+        <!--name是模型的属性名-->
+        <!--column是数据库表的列名-->
+        <id name="uid" column="id">
+            <!--generator是id的生成策略-->
+            <generator class="native"></generator>
+        </id>
+        <property name="username"></property>
+        <property name="password"></property>
+    </class>
+</hibernate-mapping>

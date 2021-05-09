@@ -1,0 +1,17 @@
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.hibernate.domain">
+    <!--name是模型的全类名-->
+    <class name="Order" table="t_order">
+        <!--name是模型的属性名-->
+        <!--column是数据库表的列名-->
+        <id name="id">
+            <!--generator是id的生成策略-->
+            <generator class="native"></generator>
+        </id>
+        <property name="name"></property>
+        <!--column写外键-->
+        <many-to-one name="customer" column="customer_id" class="Customer"/>
+    </class>
+</hibernate-mapping>
